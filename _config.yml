@@ -1,6 +1,13 @@
-name: Andrew's Articles
+title: Andrew's Articles
+name: Andrew Dolby's
 description: Tech Articles
 meta_description: "Andrew Dolby's Tech Articles"
+
+url: "https://andrewdolby.com"
+baseurl: "/articles"
+google_analytics: "UA-87952975-1"
+disqus_shortname: "andrewdolby"
+paginate: 20
 
 markdown: kramdown
 highlighter: rouge
@@ -8,13 +15,6 @@ gems: [jekyll-paginate]
 exclude:
   - Gemfile
   - Gemfile.lock
-
-paginate: 20
-title: Andrew's Articles
-baseurl: "/articles"
-url: "https://andrewdolby.com"
-google_analytics: "UA-87952975-1"
-disqus_shortname: "andrewdolby"
 
 # Details for the RSS feed generator
 author:         "Andrew Dolby"
