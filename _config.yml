@@ -1,0 +1,43 @@
+name: Andrew's Articles
+description: Tech Articles
+meta_description: "Andrew Dolby's Tech Articles"
+
+markdown: kramdown
+highlighter: rouge
+gems: [jekyll-paginate]
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+paginate: 20
+title: Andrew's Articles
+baseurl: "/articles"
+url: "https://andrewdolby.com"
+google_analytics: "UA-87952975-1"
+disqus_shortname: "andrewdolby"
+
+# Details for the RSS feed generator
+author:         "Andrew Dolby"
+authorTwitter:  "andrewdolby"
+
+permalink:       /:year/:title/
+
+defaults:
+    -
+        scope:
+            path: "" # empty string for all files
+            type: pages
+        values:
+            layout: default
+    -
+        scope:
+            path: "" # empty string for all files
+            type: posts
+        values:
+            layout: post
+    -
+        scope:
+            path: ""
+            type: drafts
+        values:
+            layout: post
