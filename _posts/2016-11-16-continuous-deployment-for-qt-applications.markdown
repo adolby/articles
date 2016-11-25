@@ -35,7 +35,7 @@ If you want to use the latest version, you'll need to find a build of Qt for you
 
 You can build Qt yourself or install Qt from the official installer on another system and archive the files. You'll then need to host the file and download and unpack it in your build script. Finally, add the binaries to your source folder and add the binary path to your PATH variable.
 
-Alternatively, Ben Lau details how to execut the Qt Project installers on Linux with the [Qt-CI project][qtci], and it looks like a great alternative solution.
+Alternatively, Ben Lau details how to execute the Qt Project installers on Linux with the [Qt-CI project][qtci], and it looks like a great alternative solution.
 
 In the templates provided, I've hosted Qt versions on a GitHub repo I use for providing unofficial Qt builds. You could create your own similar repo or use mine, which can be found at https://github.com/adolby/qt-more-builds.
 
