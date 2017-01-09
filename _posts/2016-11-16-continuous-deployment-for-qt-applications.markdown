@@ -65,7 +65,7 @@ Below are templates of build config files for Travis CI and AppVeyor and build s
 
 You can write your build scripts in whatever language that you prefer, as long as it will run on your build environment of choice. I've written shell scripts for macOS and Linux and batch files for Windows for you to use as templates.
 
-## Travis CI
+# Travis CI
 
 The Travis CI config file specifies building and deployment on macOS and Ubuntu 14.04. To get started on Travis CI you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on Travis CI.
 
@@ -148,7 +148,7 @@ notifications:
     on_failure: change
 {% endhighlight %}
 
-## macOS
+# macOS
 
 This macOS build script builds and run tests for CI, then packages the application as a dmg file archive for deployment. Make sure to replace YourApp with your app's name. $TAG_NAME is a Travis CI specific environment variable containing the tag name of the current build.
 
@@ -229,7 +229,7 @@ echo "Done!"
 exit 0
 {% endhighlight %}
 
-## Ubuntu 14.04
+# Ubuntu 14.04
 
 This Ubuntu build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. $TAG_NAME is a Travis CI specific environment variable containing the tag name of the current build.
 
@@ -368,7 +368,7 @@ echo "Done!"
 exit 0
 {% endhighlight %}
 
-## AppVeyor
+# AppVeyor
 
 The AppVeyor config file specifies building and deployment on Windows. To get started on AppVeyor you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on AppVeyor.
 
@@ -427,8 +427,7 @@ deploy:
       appveyor_repo_tag: true
 {% endhighlight %}
 
-## Windows
-
+# Windows
 This Windows build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. %APPVEYOR_REPO_TAG_NAME% is an AppVeyor specific environment variable containing the tag name of the current build.
 
 **build_windows.cmd**
