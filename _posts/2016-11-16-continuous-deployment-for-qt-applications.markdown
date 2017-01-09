@@ -7,25 +7,25 @@ categories: qt continuous-deployment
 comments: true
 ---
 
-## Introduction
+# Introduction
 
-The purpose of this article is to help you set up a continuous deployment pipeline for Windows, macOS, and Linux, specifically for building and deploying Qt applications. I've provided discussion of the process and some templates you can use as a starting point for automatically deploying your apps in this article.
+This article will show you how to set up a continuous deployment pipeline for Windows, macOS, and Linux-- specifically for building and deploying Qt applications. It contains template code and discussion that demonstrates how to automatically deploy your Qt apps.
 
-This article defines continuous deployment as the process of building and deploying your application automatically. It doesn't necessarily mean that every build needs to be deployed.
+We'll define continuous deployment as the process of building and deploying your application automatically. It doesn't necessarily mean that every build needs to be deployed.
 
 The templates are configuration files and build scripts for use on [Travis CI][travis] for macOS and Ubuntu and [AppVeyor][appveyor] for Windows.
 
 You can reference the scripts that inspired this article in the [Kryvos][kryvos] ([https://github.com/adolby/Kryvos][kryvos]) and [Dialogue][dialogue] ([https://github.com/adolby/Dialogue][dialogue]) repositories.
 
-## Build script design
+# Build script design
 
 [Travis CI][travis] and [AppVeyor][appveyor] support running scripts (shell, batch, Python, etc.) from the project repository, which means that you could set up build scripts that work on an arbitrary deployment service.
 
 The templates demonstrate how to build and deploy an installer and portable archive for Windows and Linux and a dmg archive for macOS.
 
-## Qt specifics
+# Qt specifics
 
-# Installing Qt on your continuous deployment platform
+## Installing Qt on your continuous deployment platform
 
 **Travis CI**
 
@@ -43,29 +43,29 @@ In the templates provided, I've hosted Qt versions on a GitHub repo I use for pr
 
 AppVeyor has current versions of Qt installed on their build images, so you'll just need to add the Qt binary path to your PATH variable. You can build with the Visual C++ compiler from multiple Visual Studio versions or with MinGW. If you're building with the Visual C++ compiler, you'll need to call vcvarsall.bat with %PLATFORM% as the argument, where %PLATFORM% is an AppVeyor environment variable.
 
-# Qt dependencies
+## Qt dependencies
 
 Qt provides tools that copy dependency files for deployment on macOS and Windows. They work very well, though there is no tool for Linux deployment. The Qt documentation on deployment is a great resource to use when you're setting the command line parameters up for macdeployqt and windeployqt. The parameters are similar between the two tools, but note that the syntax is slightly different.
 
-# QML apps
+## QML apps
 
 The deployment tools can also determine QML dependencies from your QML source files if you pass the directory containing the QML files in your project as a parameter. To deploy a QML app on Linux, you'll need to note your dependencies yourself or compare the output from macdeployqt or windeployqt.
 
 The Dialogue repo shows how to copy the necessary files for deploying a QML project on Linux.
 
-# Linux packages
+## Linux packages
 
 Travis CI runs Ubuntu 12.04 or Ubuntu 14.04; the latter is available by specifying dist: trusty in your .travis.yml configuration file. If you are developing your application on a different version of Ubuntu or another operating system, some software packages may not available in the same version you developed your application with.
 
 To resolve this, you can create your own package repository, build your application's missing dependency from source, or try with an older version.
 
-## Templates
+# Templates
 
 Below are templates of build config files for Travis CI and AppVeyor and build script files that run on them.
 
 You can write your build scripts in whatever language that you prefer, as long as it will run on your build environment of choice. I've written shell scripts for macOS and Linux and batch files for Windows for you to use as templates.
 
-# Travis CI
+## Travis CI
 
 The Travis CI config file specifies building and deployment on macOS and Ubuntu 14.04. To get started on Travis CI you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on Travis CI.
 
@@ -148,7 +148,7 @@ notifications:
     on_failure: change
 {% endhighlight %}
 
-# macOS
+## macOS
 
 This macOS build script builds and run tests for CI, then packages the application as a dmg file archive for deployment. Make sure to replace YourApp with your app's name. $TAG_NAME is a Travis CI specific environment variable containing the tag name of the current build.
 
@@ -229,7 +229,7 @@ echo "Done!"
 exit 0
 {% endhighlight %}
 
-# Ubuntu 14.04
+## Ubuntu 14.04
 
 This Ubuntu build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. $TAG_NAME is a Travis CI specific environment variable containing the tag name of the current build.
 
@@ -368,7 +368,7 @@ echo "Done!"
 exit 0
 {% endhighlight %}
 
-# AppVeyor
+## AppVeyor
 
 The AppVeyor config file specifies building and deployment on Windows. To get started on AppVeyor you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on AppVeyor.
 
