@@ -428,6 +428,7 @@ deploy:
 {% endhighlight %}
 
 # Windows
+
 This Windows build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. %APPVEYOR_REPO_TAG_NAME% is an AppVeyor specific environment variable containing the tag name of the current build.
 
 **build_windows.cmd**
