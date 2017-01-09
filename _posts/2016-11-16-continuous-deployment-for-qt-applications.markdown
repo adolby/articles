@@ -424,10 +424,10 @@ deploy:
     prerelease: false
     force_update: true
     on:
-      appveyor_repo_tag: true # deploy on tag push only
+      appveyor_repo_tag: true
 {% endhighlight %}
 
-# Windows
+## Windows
 
 This Windows build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. %APPVEYOR_REPO_TAG_NAME% is an AppVeyor specific environment variable containing the tag name of the current build.
 
@@ -473,7 +473,7 @@ cd %project_dir%\installer\windows\x86_64\
 binarycreator.exe --offline-only -c config\config.xml -p packages YourApp_%TAG_NAME%_windows_x86_64_installer.exe
 {% endhighlight %}
 
-## Conclusion
+# Conclusion
 
 I hope that these templates provide a good start for you to set up continuous deployment for your project!
 
