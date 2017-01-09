@@ -69,7 +69,7 @@ You can write your build scripts in whatever language that you prefer, as long a
 
 The Travis CI config file specifies building and deployment on macOS and Ubuntu 14.04. To get started on Travis CI you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on Travis CI.
 
-The config file details deployment to [GitHub Releases][releases]. There are other deployment targets available and detailed in the Travis CI documentation.
+The config file demonstrates deployment to [GitHub Releases][releases]. There are other deployment targets available. The details are in the Travis CI documentation.
 
 To allow Travis to deploy to GitHub Releases, you'll need to [create a personal access token on GitHub][githubtoken]. Next, you'll use the Travis tool to encrypt (hash) it as a secure environment variable. Then copy the output over the secure key in the deployment section with your encrypted (hashed) personal access key.
 
@@ -372,7 +372,7 @@ exit 0
 
 The AppVeyor config file specifies building and deployment on Windows. To get started on AppVeyor you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on AppVeyor.
 
-The config file details deployment to [GitHub Releases][releases]. There are other deployment targets available and detailed in the AppVeyor documentation.
+The config file demonstrates deployment to [GitHub Releases][releases]. There are other deployment targets available. The details are in the AppVeyor documentation.
 
 To allow Travis to deploy to GitHub Releases, you'll need to [create a personal access token on GitHub][githubtoken]. Next, you'll use the Encrypt data tool, which can be found on the accounts dropdown menu after signing in on AppVeyor, to encrypt (hash) it as a secure environment variable. Then copy the output over the secure key in the deployment section with your encrypted (hashed) personal access key.
 
