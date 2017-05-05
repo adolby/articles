@@ -9,7 +9,7 @@ comments: true
 
 # Introduction
 
-This article will show you how to set up a continuous deployment pipeline for Windows, macOS, and Linux-- specifically for building and deploying Qt applications. It contains template code and discussion that demonstrates how to automatically deploy your Qt apps.
+This article will show you how to set up a continuous deployment pipeline for Windows, macOS, and Linux for building and deploying Qt applications. It contains template code and discussion that demonstrates how to automatically deploy your Qt apps.
 
 We'll define continuous deployment as the process of building and deploying your application automatically. It doesn't necessarily mean that every build needs to be deployed.
 
@@ -29,7 +29,7 @@ The templates demonstrate how to build and deploy an installer and portable arch
 
 **Travis CI**
 
-[Qt][qt] can be installed with package managers if you are willing to accept the Qt version that is currently provided for the continuous deployment platform's Linux distribution and version or on [Homebrew][homebrew] for macOS. However, these packages are frequently not up to date.
+[Qt][qt] can be installed with package managers if you are willing to accept the Qt version that is currently provided for the continuous deployment platform's Linux distribution and version or on [Homebrew][homebrew] for macOS.
 
 If you want to use the latest version, you'll need to find a build of Qt for your operating system. The Qt Project provides official builds of Qt, but their installers have no command line mode, which means that the latest Qt version can't be installed easily.
 
@@ -177,17 +177,10 @@ brew install p7zip
 
 # Install Qt
 echo "Installing Qt..."
-cd /usr/local/
-sudo wget https://github.com/adolby/qt-more-builds/releases/download/5.7/qt-opensource-5.7.0-macos-x86_64-clang.zip
-sudo 7z x qt-opensource-5.7.0-macos-x86_64-clang.zip &>/dev/null
-sudo chmod -R +x /usr/local/Qt-5.7.0/bin/
+brew install qt
 
 # Add Qt binaries to path
-PATH=/usr/local/Qt-5.7.0/bin/:${PATH}
-
-# Create temporary symlink for Xcode8 compatibility
-cd /Applications/Xcode.app/Contents/Developer/usr/bin/
-sudo ln -s xcodebuild xcrun
+PATH=/usr/local/opt/qt/bin/:${PATH}
 
 # Build your app
 echo "Building YourApp..."
