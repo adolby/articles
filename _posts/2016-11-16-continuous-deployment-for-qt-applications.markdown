@@ -9,19 +9,11 @@ comments: true
 
 # Introduction
 
-This article will show you how to set up a continuous deployment pipeline for Windows, macOS, and Linux for building and deploying Qt applications. It contains template code and discussion that demonstrates how to automatically deploy your Qt apps.
+This article shows you how to set up a continuous deployment pipeline to build and deploy Qt applications. It demonstrates this with template scripts on Travis CI and AppVeyor.
 
-We'll define continuous deployment as the process of building and deploying your application automatically. It doesn't necessarily mean that every build needs to be deployed.
+The templates are configuration files and build scripts compatible with [Travis CI][travis] for macOS and Ubuntu and [AppVeyor][appveyor] for Windows.
 
-The templates are configuration files and build scripts for use on [Travis CI][travis] for macOS and Ubuntu and [AppVeyor][appveyor] for Windows.
-
-You can reference the scripts that inspired this article in the [Kryvos][kryvos] ([https://github.com/adolby/Kryvos][kryvos]) and [Dialogue][dialogue] ([https://github.com/adolby/Dialogue][dialogue]) repositories.
-
-# Build script design
-
-[Travis CI][travis] and [AppVeyor][appveyor] support running scripts (shell, batch, Python, etc.) from the project repository, which means that you could set up build scripts that work on an arbitrary deployment service.
-
-The templates demonstrate how to build and deploy an installer and portable archive for Windows and Linux and a dmg archive for macOS.
+You can reference the build scripts that inspired this article in the [Kryvo][kryvo] ([https://github.com/adolby/Kryvo][kryvo]) and [Dialogue][dialogue] ([https://github.com/adolby/Dialogue][dialogue]) repositories.
 
 # Qt specifics
 
@@ -29,47 +21,59 @@ The templates demonstrate how to build and deploy an installer and portable arch
 
 **Travis CI**
 
-[Qt][qt] can be installed with package managers if you are willing to accept the Qt version that is currently provided for the continuous deployment platform's Linux distribution and version or on [Homebrew][homebrew] for macOS.
+[Qt][qt] can be installed with package managers if you are willing to accept the Qt version available on each platform.
 
-If you want to use the latest version, you'll need to find a build of Qt for your operating system. The Qt Project provides official builds of Qt, but their installers have no command line mode, which means that the latest Qt version can't be installed easily.
+If you want to use a different Qt version, you'll need to find a build of Qt for your operating system.
 
-You can build Qt yourself or install Qt from the official installer on another system and archive the files. You'll then need to host the file and download and unpack it in your build script. Finally, add the binaries to your source folder and add the binary path to your PATH variable.
+The Ubuntu template script uses my GitHub repo that provides unofficial Qt builds (https://github.com/adolby/qt-more-builds). The macOS build script is using brew.
 
-Alternatively, Ben Lau details how to execute the Qt Project installers on Linux with the [Qt-CI project][qtci]. It looks like a great alternative solution.
+Other Options
 
-In the templates provided, I've hosted Qt versions on a GitHub repo I use for providing unofficial Qt builds. You could create your own similar repo or use mine, which can be found at https://github.com/adolby/qt-more-builds.
+1. You can build Qt (or install Qt from the official installer) on a matching OS and archive the files. You'll then need to host the archive and download and unpack it in your build script. Finally, add the binaries to your source folder and add the binary path to your PATH variable.
+
+2. Ben Lau details how to run the Qt Project installers on Linux with the [Qt-CI project][qtci]. It looks like a great alternative solution.
 
 **AppVeyor**
 
-AppVeyor has current versions of Qt installed on their build images, so you'll just need to add the Qt binary path to your PATH variable. You can build with the Visual C++ compiler from multiple Visual Studio versions or with MinGW. If you're building with the Visual C++ compiler, you'll need to call vcvarsall.bat with %PLATFORM% as the argument, where %PLATFORM% is an AppVeyor environment variable.
+AppVeyor has current versions of Qt installed on their build images, so you'll just need to add the Qt binary path to your PATH variable.
 
 ## Qt dependencies
 
-Qt provides tools that copy dependency files for deployment on macOS and Windows. They work very well, though there is no tool for Linux deployment. The Qt documentation on deployment is a great resource to use when you're setting the command line parameters up for macdeployqt and windeployqt. The parameters are similar between the two tools, but note that the syntax is slightly different.
+Qt provides tools that copy dependency files for deployment on macOS and Windows.
+
+The Qt documentation on deployment is a great resource to use when you're setting the command line parameters up for macdeployqt and windeployqt. The parameters are similar between the tools, but note that the syntax is slightly different.
+
+There is a third-party [linuxdeployqt][linuxdeployqt] but I haven't tried it yet.
 
 ## QML apps
 
-The deployment tools can also determine QML dependencies from your QML source files if you pass the directory containing the QML files in your project as a parameter. To deploy a QML app on Linux, you'll need to note your dependencies yourself or compare the output from macdeployqt or windeployqt.
+The deployment tools can also determine QML dependencies from your QML source files if you pass the directory containing the QML files in your project as a parameter.
+
+To deploy a QML app on Linux, you'll need to note your dependencies yourself or compare the output from macdeployqt or windeployqt.
 
 The Dialogue repo shows how to copy the necessary files for deploying a QML project on Linux.
 
+There is also a third-party [linuxdeployqt][linuxdeployqt] but I haven't tried it yet.
+
 ## Linux packages
 
-Travis CI runs Ubuntu 12.04 or Ubuntu 14.04; the latter is available by specifying dist: trusty in your .travis.yml configuration file. If you are developing your application on a different version of Ubuntu or another operating system, some software packages may not available in the same version you developed your application with.
+Travis CI runs Ubuntu 12.04 or Ubuntu 14.04; the latter is available by specifying dist: trusty in your .travis.yml configuration file. If you are developing your application on a different version of Ubuntu or another operating system, some software packages may not be available in the same version you developed your application with.
 
-To resolve this, you can create your own package repository, build your application's missing dependency from source, or try with an older version.
+To fix this, you can create your own package repositories or build your application's missing dependencies from source.
 
 # Templates
 
-Below are templates of build config files for Travis CI and AppVeyor and build script files that run on them.
+Below are example build config files for Travis CI and AppVeyor and build scripts.
 
-You can write your build scripts in whatever language that you prefer, as long as it will run on your build environment of choice. I've written shell scripts for macOS and Linux and batch files for Windows for you to use as templates.
+The config file demonstrates deployment to [GitHub Releases][releases]. There are other deployment targets available on Travis CI and AppVeyor.
+
+The templates use the Git tag name as a version number, which allows you to differentiate between deployed builds with [semantic versioning][semantic] (or whatever versioning scheme you prefer).
 
 # Travis CI
 
-The Travis CI config file specifies building and deployment on macOS and Ubuntu 14.04. To get started on Travis CI you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on Travis CI.
+The Travis CI config file specifies building and deployment on macOS and Ubuntu 14.04.
 
-The config file demonstrates deployment to [GitHub Releases][releases]. There are other deployment targets available. The details are in the Travis CI documentation.
+To get started on Travis CI you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on Travis CI.
 
 To allow Travis to deploy to GitHub Releases, you'll need to [create a personal access token on GitHub][githubtoken]. Next, you'll use the Travis tool to encrypt (hash) it as a secure environment variable. Then copy the output over the secure key in the deployment section with your encrypted (hashed) personal access key.
 
@@ -78,10 +82,6 @@ This process is detailed under the [Environment Variable section in the Travis C
 Alternatively, you could add the unencrypted personal access token as an environment variable through the Travis CI settings page for your repository.
 
 Travis CI is configured to build on all branches and will only deploy on tagged commits.
-
-The templates use the Git tag name as a version number, which allows you to differentiate between deployed builds with [semantic versioning][semantic], or whatever versioning scheme you prefer.
-
-Make sure to replace YourApp with your app's name.
 
 **.travis.yml**
 
@@ -150,7 +150,7 @@ notifications:
 
 # macOS
 
-This macOS build script builds and run tests for CI, then packages the application as a dmg file archive for deployment. Make sure to replace YourApp with your app's name. $TAG_NAME is a Travis CI specific environment variable containing the tag name of the current build.
+This macOS script builds and run tests for CI, then packages the application as a dmg file archive for deployment. $TAG_NAME is a Travis CI-specific environment variable containing the tag name of the current build.
 
 **build_macOS.sh**
 
@@ -180,11 +180,11 @@ echo "Installing Qt..."
 brew install qt
 
 # Add Qt binaries to path
-PATH=/usr/local/opt/qt/bin/:${PATH}
+PATH="/usr/local/opt/qt/bin/:${PATH}"
 
 # Build your app
 echo "Building YourApp..."
-cd ${project_dir}
+cd "${project_dir}"
 qmake -config release
 make
 
@@ -192,7 +192,7 @@ make
 
 # Package your app
 echo "Packaging YourApp..."
-cd ${project_dir}/build/macOS/clang/x86_64/release/
+cd "${project_dir}/build/macOS/clang/x86_64/release/"
 
 # Remove build directories that you don't want to deploy
 rm -rf moc
@@ -215,7 +215,7 @@ cp "${project_dir}/LICENSE" "LICENSE"
 cp "${project_dir}/Qt License" "Qt License"
 
 echo "Packaging zip archive..."
-7z a YourApp_${TAG_NAME}_macos.zip "YourApp_${TAG_NAME}.dmg" "README.md" "LICENSE" "Qt License"
+7z a "YourApp_${TAG_NAME}_macos.zip" "YourApp_${TAG_NAME}.dmg" "README.md" "LICENSE" "Qt License"
 
 echo "Done!"
 
@@ -224,7 +224,7 @@ exit 0
 
 # Ubuntu 14.04
 
-This Ubuntu build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. $TAG_NAME is a Travis CI specific environment variable containing the tag name of the current build.
+This Ubuntu script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. $TAG_NAME is a Travis CI-specific environment variable containing the tag name of the current build.
 
 **build_linux.sh**
 
@@ -265,11 +265,11 @@ sudo 7z x qt-installer-framework-opensource-2.0.3-linux.7z &> /dev/null
 
 # Add Qt binaries to path
 echo "Adding Qt binaries to path..."
-PATH=${qt_install_dir}/Qt/5.7/gcc_64/bin/:${qt_install_dir}/Qt/QtIFW2.0.3/bin/:${PATH}
+PATH="${qt_install_dir}/Qt/5.7/gcc_64/bin/:${qt_install_dir}/Qt/QtIFW2.0.3/bin/:${PATH}"
 
 # Build YourApp
 echo "Building YourApp..."
-cd ${project_dir}
+cd "${project_dir}"
 
 # Output qmake version info to make sure we have the right install
 # directory in the PATH variable
@@ -282,7 +282,7 @@ make
 
 # Package YourApp
 echo "Packaging YourApp..."
-cd ${project_dir}/build/linux/gcc/x86_64/release/YourApp/
+cd "${project_dir}/build/linux/gcc/x86_64/release/YourApp/"
 
 # Remove build directories that you don't want to deploy
 rm -rf moc
@@ -363,9 +363,9 @@ exit 0
 
 # AppVeyor
 
-The AppVeyor config file specifies building and deployment on Windows. To get started on AppVeyor you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on AppVeyor.
+The AppVeyor config file specifies building and deployment on Windows.
 
-The config file demonstrates deployment to [GitHub Releases][releases]. There are other deployment targets available. The details are in the AppVeyor documentation.
+To get started on AppVeyor you'll need to create a GitHub (or other Git hosting provider) repository and then enable it on AppVeyor.
 
 To allow Travis to deploy to GitHub Releases, you'll need to [create a personal access token on GitHub][githubtoken]. Next, you'll use the Encrypt data tool, which can be found on the accounts dropdown menu after signing in on AppVeyor, to encrypt (hash) it as a secure environment variable. Then copy the output over the secure key in the deployment section with your encrypted (hashed) personal access key.
 
@@ -375,9 +375,7 @@ Alternatively, you could add the unencrypted personal access token as an environ
 
 AppVeyor is configured to build on all branches and will only deploy on tagged commits.
 
-The template uses the Git tag name as a version number, which allows you to differentiate between deployed builds with [semantic versioning][semantic], or whatever versioning scheme you prefer.
-
-Make sure to replace YourApp with your app's name.
+You can build with the Visual C++ compiler from multiple Visual Studio versions or with MinGW. If you're building with the Visual C++ compiler, you'll need to call vcvarsall.bat with %PLATFORM% as the argument, where %PLATFORM% is an AppVeyor environment variable.
 
 **appveyor.yml**
 
@@ -422,7 +420,7 @@ deploy:
 
 # Windows
 
-This Windows build script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. Make sure to replace YourApp with your app's name. %APPVEYOR_REPO_TAG_NAME% is an AppVeyor specific environment variable containing the tag name of the current build.
+This Windows script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. %APPVEYOR_REPO_TAG_NAME% is an AppVeyor-specific environment variable containing the tag name of the current build.
 
 **build_windows.cmd**
 
@@ -466,14 +464,12 @@ cd %project_dir%\installer\windows\x86_64\
 binarycreator.exe --offline-only -c config\config.xml -p packages YourApp_%TAG_NAME%_windows_x86_64_installer.exe
 {% endhighlight %}
 
-# Conclusion
-
-I hope that these templates provide a good start for you to set up continuous deployment for your project!
+# Questions and comments
 
 Please contact me (andrewdolby@gmail.com) or leave a comment if you have any questions or suggestions, and I'll be happy to address them in this article. I'll also be happy to help with problems you're having with continuous integration/deployment.
 
 [qt]: https://www.qt.io/
-[kryvos]: https://github.com/adolby/Kryvos
+[kryvo]: https://github.com/adolby/Kryvo
 [dialogue]: https://github.com/adolby/Dialogue
 [travis]: https://travis-ci.org/
 [appveyor]: https://www.appveyor.com/
@@ -484,3 +480,4 @@ Please contact me (andrewdolby@gmail.com) or leave a comment if you have any que
 [encryptappveyor]: https://www.appveyor.com/docs/build-configuration/#secure-variables
 [githubtoken]: https://help.github.com/articles/creating-an-access-token-for-command-line-use/
 [qtci]: https://github.com/benlau/qtci
+[linuxdeployqt]: https://github.com/probonopd/linuxdeployqt
