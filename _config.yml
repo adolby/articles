@@ -1,43 +1,17 @@
-title: Andrew's Articles
-name: Andrew Dolby's
-description: Tech Articles
-meta_description: "Andrew Dolby's Tech Articles"
-
-url: "https://andrewdolby.com"
-baseurl: "/articles"
-google_analytics: "UA-87952975-1"
+name: Andrew's Articles
+description: Programming and Tech
+meta_description: "Andrew's Articles"
 disqus_shortname: "andrewdolby"
-paginate: 20
-
 markdown: kramdown
 highlighter: rouge
+logo: false
+paginate: 20
+baseurl: /articles
+domain_name: 'https://andrewdolby.com'
+google_analytics: 'UA-87952975-1'
 gems: [jekyll-paginate]
-exclude:
-  - Gemfile
-  - Gemfile.lock
+permalink: /:year/:title
 
 # Details for the RSS feed generator
-author:         "Andrew Dolby"
-authorTwitter:  "andrewdolby"
-
-permalink:       /:year/:title/
-
-defaults:
-    -
-        scope:
-            path: "" # empty string for all files
-            type: pages
-        values:
-            layout: default
-    -
-        scope:
-            path: "" # empty string for all files
-            type: posts
-        values:
-            layout: post
-    -
-        scope:
-            path: ""
-            type: drafts
-        values:
-            layout: post
+url: 'https://andrewdolby.com'
+author: 'Andrew Dolby'

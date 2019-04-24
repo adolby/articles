@@ -4,10 +4,8 @@ title:  "Continuous deployment for Qt applications"
 description: "Deploy automatically with Travis CI and AppVeyor"
 date:   2016-11-16 13:11:51 -0400
 categories: qt continuous-deployment
-comments: true
+disqus: true
 ---
-
-# Introduction
 
 This article shows you how to set up a continuous deployment pipeline to build and deploy Qt applications. It demonstrates this with template scripts on Travis CI and AppVeyor.
 
@@ -15,9 +13,9 @@ The templates are configuration files and build scripts compatible with [Travis 
 
 You can reference the build scripts that inspired this article in the [Kryvo][kryvo] ([https://github.com/adolby/Kryvo][kryvo]) and [Dialogue][dialogue] ([https://github.com/adolby/Dialogue][dialogue]) repositories.
 
-# Qt specifics
+## Qt specifics
 
-## Installing Qt on your continuous deployment platform
+### Installing Qt on your continuous deployment platform
 
 **Travis CI**
 
@@ -25,7 +23,7 @@ You can reference the build scripts that inspired this article in the [Kryvo][kr
 
 If you want to use a different Qt version, you'll need to find a build of Qt for your operating system.
 
-The Ubuntu template script uses my GitHub repo that provides unofficial Qt builds (https://github.com/adolby/qt-more-builds). The macOS build script is using brew.
+The Ubuntu template script uses my GitHub repo that provides unofficial Qt builds ([https://github.com/adolby/qt-more-builds][qtmorebuilds]). The macOS build script acquires Qt with brew.
 
 Other Options
 
@@ -37,7 +35,7 @@ Other Options
 
 AppVeyor has current versions of Qt installed on their build images, so you'll just need to add the Qt binary path to your PATH variable.
 
-## Qt dependencies
+### Qt dependencies
 
 Qt provides tools that copy dependency files for deployment on macOS and Windows.
 
@@ -45,7 +43,7 @@ The Qt documentation on deployment is a great resource to use when you're settin
 
 There is a third-party [linuxdeployqt][linuxdeployqt] but I haven't tried it yet.
 
-## QML apps
+### QML apps
 
 The deployment tools can also determine QML dependencies from your QML source files if you pass the directory containing the QML files in your project as a parameter.
 
@@ -55,13 +53,13 @@ The Dialogue repo shows how to copy the necessary files for deploying a QML proj
 
 There is also a third-party [linuxdeployqt][linuxdeployqt] but I haven't tried it yet.
 
-## Linux packages
+### Linux packages
 
 Travis CI runs Ubuntu 12.04 or Ubuntu 14.04; the latter is available by specifying dist: trusty in your .travis.yml configuration file. If you are developing your application on a different version of Ubuntu or another operating system, some software packages may not be available in the same version you developed your application with.
 
 To fix this, you can create your own package repositories or build your application's missing dependencies from source.
 
-# Templates
+## Templates
 
 Below are example build config files for Travis CI and AppVeyor and build scripts.
 
@@ -69,7 +67,7 @@ The config file demonstrates deployment to [GitHub Releases][releases]. There ar
 
 The templates use the Git tag name as a version number, which allows you to differentiate between deployed builds with [semantic versioning][semantic] (or whatever versioning scheme you prefer).
 
-# Travis CI
+## Travis CI
 
 The Travis CI config file specifies building and deployment on macOS and Ubuntu 14.04.
 
@@ -85,7 +83,7 @@ Travis CI is configured to build on all branches and will only deploy on tagged 
 
 **.travis.yml**
 
-{% highlight yml %}
+```yml
 dist: trusty
 sudo: required
 
@@ -146,15 +144,15 @@ notifications:
       - andrewdolby@gmail.com
     on_success: change
     on_failure: change
-{% endhighlight %}
+```
 
-# macOS
+## macOS
 
 This macOS script builds and run tests for CI, then packages the application as a dmg file archive for deployment. $TAG_NAME is a Travis CI-specific environment variable containing the tag name of the current build.
 
 **build_macOS.sh**
 
-{% highlight shell %}
+```shell
 #!/bin/bash
 
 set -o errexit -o nounset
@@ -220,15 +218,15 @@ echo "Packaging zip archive..."
 echo "Done!"
 
 exit 0
-{% endhighlight %}
+```
 
-# Ubuntu 14.04
+## Ubuntu 14.04
 
 This Ubuntu script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. $TAG_NAME is a Travis CI-specific environment variable containing the tag name of the current build.
 
 **build_linux.sh**
 
-{% highlight shell %}
+```shell
 #!/bin/bash
 
 set -o errexit -o nounset
@@ -359,9 +357,9 @@ binarycreator --offline-only -c config/config.xml -p packages YourApp_${TAG_NAME
 echo "Done!"
 
 exit 0
-{% endhighlight %}
+```
 
-# AppVeyor
+## AppVeyor
 
 The AppVeyor config file specifies building and deployment on Windows.
 
@@ -379,7 +377,7 @@ You can build with the Visual C++ compiler from multiple Visual Studio versions 
 
 **appveyor.yml**
 
-{% highlight yml %}
+```yml
 image: Visual Studio 2015
 
 environment:
@@ -416,15 +414,15 @@ deploy:
     force_update: true
     on:
       appveyor_repo_tag: true
-{% endhighlight %}
+```
 
-# Windows
+## Windows
 
 This Windows script builds and run tests for CI, then packages the application as a portable archive and creates an installer executable for deployment. %APPVEYOR_REPO_TAG_NAME% is an AppVeyor-specific environment variable containing the tag name of the current build.
 
 **build_windows.cmd**
 
-{% highlight powershell %}
+```powershell
 echo on
 
 SET project_dir="%cd%"
@@ -462,9 +460,9 @@ echo Packaging portable archive...
 echo Creating installer...
 cd %project_dir%\installer\windows\x86_64\
 binarycreator.exe --offline-only -c config\config.xml -p packages YourApp_%TAG_NAME%_windows_x86_64_installer.exe
-{% endhighlight %}
+```
 
-# Questions and comments
+## Questions and comments
 
 Please contact me (andrewdolby@gmail.com) or leave a comment if you have any questions or suggestions, and I'll be happy to address them in this article. I'll also be happy to help with problems you're having with continuous integration/deployment.
 
@@ -481,3 +479,4 @@ Please contact me (andrewdolby@gmail.com) or leave a comment if you have any que
 [githubtoken]: https://help.github.com/articles/creating-an-access-token-for-command-line-use/
 [qtci]: https://github.com/benlau/qtci
 [linuxdeployqt]: https://github.com/probonopd/linuxdeployqt
+[qtmorebuilds]: https://github.com/adolby/qt-more-builds
